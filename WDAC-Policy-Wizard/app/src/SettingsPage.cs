@@ -28,7 +28,7 @@ namespace WDAC_Wizard
             ShowVersionNumber();
 
             this._MainWindow = pMainWindow;
-            this.SettingsDict = new Dictionary<string, bool>(); 
+            this.SettingsDict = new Dictionary<string, bool>();
         }
 
         //
@@ -75,7 +75,7 @@ namespace WDAC_Wizard
             }
 
             // Save setting and show update message to user
-            SaveSetting(); 
+            SaveSetting();
         }
 
         private void ConvertPolicy_CheckBox_Click(object sender, EventArgs e)
@@ -222,7 +222,7 @@ namespace WDAC_Wizard
 
             // Mode changed. Need to repaint all other UI elements like 
             // MainWindow, Control Panel, other existing Pages
-            RepaintUIModeChange(); 
+            RepaintUIModeChange();
         }
 
         /// <summary>
@@ -298,15 +298,15 @@ namespace WDAC_Wizard
                 string configPath = System.IO.Path.Combine(this._MainWindow.ExeFolderPath, "WDAC Wizard.exe.config");
                 doc.Load(configPath); // Reading from the xml config file
                 XmlNodeList settingsNodes = doc.GetElementsByTagName("setting");
-                const int START = 15; 
-                foreach(XmlNode settingNode in settingsNodes)
+                const int START = 15;
+                foreach (XmlNode settingNode in settingsNodes)
                 {
                     int stop = settingNode.OuterXml.IndexOf("serialize") - 2;
                     string settingName = settingNode.OuterXml.Substring(START, stop - START);
                     string settingVal = settingNode.InnerText;
-                    this.SettingsDict[settingName] = settingVal=="True";
+                    this.SettingsDict[settingName] = settingVal == "True";
 
-                    Logger.Log.AddInfoMsg(String.Format("Parsed {0} = {1}", settingName, settingVal)); 
+                    Logger.Log.AddInfoMsg(String.Format("Parsed {0} = {1}", settingName, settingVal));
                 }
 
                 // Set the UI state for all the checkboxes
@@ -329,7 +329,7 @@ namespace WDAC_Wizard
         private void SettingsPage_Load(object sender, EventArgs e)
         {
             // On load, configure UI to match the app settings
-            Logger.Log.AddNewSeparationLine("Settings Page Load"); 
+            Logger.Log.AddNewSeparationLine("Settings Page Load");
 
             this.SettingsDict.Add("useEnvVars", (bool)Properties.Settings.Default.useEnvVars);
             this.SettingsDict.Add("useDefaultStrings", (bool)Properties.Settings.Default.useDefaultStrings);
@@ -365,13 +365,13 @@ namespace WDAC_Wizard
                 // Skip this setting, there is no checkbox to update
                 if (this.Controls.Find(checkBoxName, true).Length < 1)
                 {
-                    continue; 
+                    continue;
                 }
 
                 if (!settingDict[settingName]) //False (unchecked) case
                 {
                     this.Controls.Find(checkBoxName, true).FirstOrDefault().Tag = "Unchecked";
-                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_unchecked; 
+                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackgroundImage = Properties.Resources.check_box_unchecked;
                 }
                 else // Checked case
                 {
@@ -381,17 +381,17 @@ namespace WDAC_Wizard
 
                 // Set BackColor of the checkbox
                 // Dark Mode
-                if(Properties.Settings.Default.useDarkMode)
+                if (Properties.Settings.Default.useDarkMode)
                 {
-                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.FromArgb(15, 15, 15); 
+                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.FromArgb(15, 15, 15);
                 }
                 else
                 {
-                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.White; 
+                    this.Controls.Find(checkBoxName, true).FirstOrDefault().BackColor = Color.White;
                 }
 
-                Logger.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName])); 
-            }            
+                Logger.Log.AddInfoMsg(String.Format("Setting {0} set to {1}", settingName, settingDict[settingName]));
+            }
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         private void SettingUpdateTimer_Tick(object sender, EventArgs e)
         {
-            this.Update_Label.Visible = false; 
+            this.Update_Label.Visible = false;
         }
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace WDAC_Wizard
             // Set correct Icons
             List<PictureBox> pictureBoxes = new List<PictureBox>();
             GetPictureBoxesRecursive(this, pictureBoxes);
-            SetPictureBoxesColor(pictureBoxes); 
+            SetPictureBoxesColor(pictureBoxes);
 
             // Set Form Back Color
             SetFormBackColor();
@@ -549,14 +549,14 @@ namespace WDAC_Wizard
         private void SetLabelsColor(List<Label> labels)
         {
             // Dark Mode
-            if(Properties.Settings.Default.useDarkMode)
+            if (Properties.Settings.Default.useDarkMode)
             {
-                foreach(Label label in labels)
+                foreach (Label label in labels)
                 {
-                    if(label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
+                    if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         label.ForeColor = Color.White;
-                        label.BackColor = Color.FromArgb(15, 15, 15); 
+                        label.BackColor = Color.FromArgb(15, 15, 15);
                     }
                 }
             }
@@ -569,7 +569,7 @@ namespace WDAC_Wizard
                     if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         label.ForeColor = Color.Black;
-                        label.BackColor = Color.White; 
+                        label.BackColor = Color.White;
                     }
                 }
             }
@@ -605,7 +605,7 @@ namespace WDAC_Wizard
             {
                 foreach (PictureBox pictureBox in pictureBoxes)
                 {
-                    pictureBox.BackColor = Color.FromArgb(15,15,15);
+                    pictureBox.BackColor = Color.FromArgb(15, 15, 15);
                 }
             }
 
@@ -626,7 +626,7 @@ namespace WDAC_Wizard
         private void SetFormBackColor()
         {
             // Dark Mode
-            if(Properties.Settings.Default.useDarkMode)
+            if (Properties.Settings.Default.useDarkMode)
             {
                 BackColor = Color.FromArgb(15, 15, 15);
             }
@@ -648,8 +648,8 @@ namespace WDAC_Wizard
             if (Properties.Settings.Default.useDarkMode)
             {
                 resetButton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                resetButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                resetButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
                 resetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                 resetButton.ForeColor = System.Drawing.Color.DodgerBlue;
                 resetButton.BackColor = System.Drawing.Color.Transparent;
@@ -659,8 +659,8 @@ namespace WDAC_Wizard
             else
             {
                 resetButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                resetButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                resetButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                resetButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
                 resetButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                 resetButton.ForeColor = System.Drawing.Color.Black;
                 resetButton.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -672,7 +672,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void ResetMainWindowColors()
         {
-            this._MainWindow.SetMainWindowColors(); 
+            this._MainWindow.SetMainWindowColors();
         }
 
         /// <summary>
@@ -681,7 +681,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void ResetControlPanelUI()
         {
-            this._MainWindow.SetControlPanelUI(); 
+            this._MainWindow.SetControlPanelUI();
         }
 
         /// <summary>
@@ -690,7 +690,7 @@ namespace WDAC_Wizard
         /// </summary>
         private void ResetNextButtonUI()
         {
-            this._MainWindow.SetNextButtonUI(); 
+            this._MainWindow.SetNextButtonUI();
         }
 
         /// <summary>
@@ -699,7 +699,12 @@ namespace WDAC_Wizard
         /// </summary>
         private void RepaintAllExistingPages()
         {
-            this._MainWindow.ReloadPreviousPages(); 
+            this._MainWindow.ReloadPreviousPages();
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

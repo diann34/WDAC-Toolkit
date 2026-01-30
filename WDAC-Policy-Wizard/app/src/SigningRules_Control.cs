@@ -28,26 +28,26 @@ namespace WDAC_Wizard
         private int RowSelected; // Data grid row number selected by the user 
         private int rowInEdit = -1;
         private DisplayObject displayObjectInEdit;
-        private CustomRuleConditionsPanel customRuleConditionsPanel = null; 
+        private CustomRuleConditionsPanel customRuleConditionsPanel = null;
 
         // Declare an ArrayList to serve as the data store. 
         private System.Collections.ArrayList displayObjects =
             new System.Collections.ArrayList();
 
         // Bool tracking whether CustomRules Panel open
-        public bool isCustomPanelOpen; 
+        public bool isCustomPanelOpen;
 
         public SigningRules_Control(MainWindow pMainWindow)
         {
             InitializeComponent();
-            this.Policy = pMainWindow.Policy; 
-            this.AllFilesinFolder = new List<string>(); 
+            this.Policy = pMainWindow.Policy;
+            this.AllFilesinFolder = new List<string>();
 
             this._MainWindow = pMainWindow;
             this._MainWindow.RedoFlowRequired = false;
-            this._MainWindow.CustomRuleinProgress = false; 
+            this._MainWindow.CustomRuleinProgress = false;
             this.RowSelected = -1;
-            this.isCustomPanelOpen = false; 
+            this.isCustomPanelOpen = false;
 
             Logger.Log.AddInfoMsg("==== Signing Rules Page Initialized ====");
         }
@@ -59,37 +59,37 @@ namespace WDAC_Wizard
         private void SigningRules_Control_Load(object sender, EventArgs e)
         {
             // Try to read CI policy. Fail out gracefully if corrupt and return to home screen
-            if(!ReadSetRules(sender, e))
+            if (!ReadSetRules(sender, e))
             {
-                return; 
+                return;
             }
 
             try
             {
                 DisplayRules();
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 Logger.Log.AddErrorMsg("DisplayRules() encountered an exception.", exp);
                 DialogResult res = MessageBox.Show("The Wizard is unable to read all the rules in your CI policy xml file. The policy XML is likely corrupted. " +
                                                     "Try converting the policy to binary to locate the issue in the XML.",
-                                                    "Parsing Error", 
-                                                    MessageBoxButtons.OK, 
+                                                    "Parsing Error",
+                                                    MessageBoxButtons.OK,
                                                     MessageBoxIcon.Error);
             }
 
             // Set recommended blocklist states
-            SetBlocklistStates(); 
+            SetBlocklistStates();
         }
 
-        
+
         /// <summary>
         /// Shows the Custom Rules Panel when the user clicks on +Custom Rules. 
         /// </summary>
         private void Label_AddCustomRules_Click(object sender, EventArgs e)
         {
             // Open the custom rules conditions panel
-            
+
             if (this.customRuleConditionsPanel == null)
             {
                 this.customRuleConditionsPanel = new CustomRuleConditionsPanel(this);
@@ -101,11 +101,11 @@ namespace WDAC_Wizard
                 // this.label_AddCustomRules.Text = "- Custom Rules"; 
                 this.isCustomPanelOpen = true;
             }
-            
-            Logger.Log.AddInfoMsg("--- Create Custom Rules Selected ---"); 
+
+            Logger.Log.AddInfoMsg("--- Create Custom Rules Selected ---");
         }
 
-        
+
         /// <summary>
         /// Diplays the signing rules from the template policy or the supplemental policy in the DataGridView on Control Load. 
         /// </summary>
@@ -113,7 +113,7 @@ namespace WDAC_Wizard
         {
             string friendlyName = String.Empty;    //  this.Policy.Signers[signerID].Name;
             string action = String.Empty;
-            string level = String.Empty; 
+            string level = String.Empty;
             string exceptionList = String.Empty;
             string fileAttrList = String.Empty;
             string signerID = String.Empty;
@@ -127,22 +127,22 @@ namespace WDAC_Wizard
             foreach (var siPolicySigner in this.Policy.siPolicy.Signers)
             {
                 WDACSigner signer = new WDACSigner();
-                
+
                 if (siPolicySigner.FileAttribRef != null)
                 {
-                    foreach(var fileRef in siPolicySigner.FileAttribRef)
+                    foreach (var fileRef in siPolicySigner.FileAttribRef)
                     {
                         signer.FileAttribRefs.Add(fileRef.RuleID);
                     }
                 }
 
                 signer.Name = siPolicySigner.Name;
-                signer.ID = siPolicySigner.ID; 
+                signer.ID = siPolicySigner.ID;
 
                 // CN
-                if(siPolicySigner.CertPublisher != null)
+                if (siPolicySigner.CertPublisher != null)
                 {
-                    signer.CommonName = siPolicySigner.CertPublisher.Value; 
+                    signer.CommonName = siPolicySigner.CertPublisher.Value;
                 }
 
                 // Opus
@@ -151,21 +151,21 @@ namespace WDAC_Wizard
                     signer.CertOemID = siPolicySigner.CertOemID.Value;
                 }
 
-                signersDict.Add(siPolicySigner.ID, signer); 
+                signersDict.Add(siPolicySigner.ID, signer);
             }
 
             // Process publisher rules first:
             foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
             {
                 // Write all Allow Signers rules
-                if(scenario.ProductSigners.AllowedSigners != null)
+                if (scenario.ProductSigners.AllowedSigners != null)
                 {
                     for (int i = 0; i < scenario.ProductSigners.AllowedSigners.AllowedSigner.Length; i++)
                     {
                         // Get signer attributes
                         signerID = scenario.ProductSigners.AllowedSigners.AllowedSigner[i].SignerId;
-                        friendlyName = signersDict[signerID].Name;   
-                        action = "Allow"; 
+                        friendlyName = signersDict[signerID].Name;
+                        action = "Allow";
                         level = "Publisher";
                         string exceptionID;
 
@@ -181,7 +181,7 @@ namespace WDAC_Wizard
                                 exceptionID = scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID;
                                 exceptionList += String.Format("{0}, ", exceptionID);
 
-                                if(!fileExceptionsDict.ContainsKey(exceptionID))
+                                if (!fileExceptionsDict.ContainsKey(exceptionID))
                                 {
                                     fileExceptionsDict.Add(scenario.ProductSigners.AllowedSigners.AllowedSigner[i].ExceptDenyRule[j].DenyRuleID, String.Empty);
                                 }
@@ -200,7 +200,7 @@ namespace WDAC_Wizard
                         if (!String.IsNullOrEmpty(signersDict[signerID].CertOemID))
                         {
                             fileAttrList += String.Format("CertOemId = {0}; ", signersDict[signerID].CertOemID);
-                        }   
+                        }
 
                         // Get associated/affected files -- FileAttributes
                         foreach (var fileRef in signersDict[signerID].FileAttribRefs)
@@ -231,8 +231,8 @@ namespace WDAC_Wizard
                     {
                         // Get signer attributes
                         signerID = scenario.ProductSigners.DeniedSigners.DeniedSigner[i].SignerId;
-                        friendlyName = signersDict[signerID].Name;   
-                        action = "Deny"; 
+                        friendlyName = signersDict[signerID].Name;
+                        action = "Deny";
                         level = "Publisher";
                         string exceptionID;
 
@@ -264,7 +264,7 @@ namespace WDAC_Wizard
                         }
 
                         // Add CertOemId (OPUS) field
-                        if(!String.IsNullOrEmpty(signersDict[signerID].CertOemID))
+                        if (!String.IsNullOrEmpty(signersDict[signerID].CertOemID))
                         {
                             fileAttrList += String.Format("CertOemId = {0}; ", signersDict[signerID].CertOemID);
                         }
@@ -275,7 +275,7 @@ namespace WDAC_Wizard
                             fileAttrList += String.Format("{0}, ", fileRef);
                         }
 
-                        if(!String.IsNullOrEmpty(fileAttrList))
+                        if (!String.IsNullOrEmpty(fileAttrList))
                         {
                             fileAttrList = fileAttrList.Remove(fileAttrList.Length - 2);
                         }
@@ -292,18 +292,18 @@ namespace WDAC_Wizard
                 }
             } // end of scenarios
 
-             // Write all "File Rules" rules
+            // Write all "File Rules" rules
             if (this.Policy.siPolicy.FileRules != null)
             {
                 var fileRulesList = this.Policy.siPolicy.FileRules;
                 string fileRuleID = String.Empty;
                 string filePath = String.Empty;
                 byte[] hash = new byte[0];
-                string fileName = String.Empty; 
+                string fileName = String.Empty;
                 string productName = String.Empty;
                 string fileDescription = String.Empty;
                 string internalName = String.Empty;
-                string packageFamilyName = String.Empty; 
+                string packageFamilyName = String.Empty;
 
                 for (int i = 0; i < fileRulesList.Length; i++)
                 {
@@ -323,10 +323,10 @@ namespace WDAC_Wizard
                         productName = ((Deny)fileRule).ProductName;
                         fileDescription = ((Deny)fileRule).FileDescription;
                         internalName = ((Deny)fileRule).InternalName;
-                        packageFamilyName = ((Deny)fileRule).PackageFamilyName; 
+                        packageFamilyName = ((Deny)fileRule).PackageFamilyName;
 
                     }
-                    else if(fileRule.GetType() == typeof(Allow))
+                    else if (fileRule.GetType() == typeof(Allow))
                     {
                         action = "Allow";
                         fileRuleID = ((Allow)fileRule).ID;
@@ -345,7 +345,7 @@ namespace WDAC_Wizard
                     else
                     {
                         // Do nothing for FileAttribute rows
-                        continue; 
+                        continue;
                     }
 
 
@@ -370,10 +370,10 @@ namespace WDAC_Wizard
                         // Fix issue where file path not in friendly name introduced in version 2.2 of the Wizard by appending filepath
                         // FriendlyName="Allow by path: "
                         // FriendlyName = "Deny by path: "
-                        if(friendlyName == Properties.Resources.TruncatedPathAllowFriendlyName
+                        if (friendlyName == Properties.Resources.TruncatedPathAllowFriendlyName
                             || friendlyName == Properties.Resources.TruncatedPathDenyFriendlyName)
                         {
-                            friendlyName += filePath; 
+                            friendlyName += filePath;
                         }
                     }
 
@@ -391,8 +391,8 @@ namespace WDAC_Wizard
                         level = "FileAttributes";
 
                         // Precede the friendlyName with the Original FileName sub-level 
-                        if (fileName != null) 
-                        { 
+                        if (fileName != null)
+                        {
                             fileAttrList += String.Format("FileName: {0}, ", fileName);
                         }
 
@@ -412,7 +412,7 @@ namespace WDAC_Wizard
                         }
 
                         // Remove trailing comma and whitespace on list of FileAttributes
-                        if(!String.IsNullOrEmpty(fileAttrList))
+                        if (!String.IsNullOrEmpty(fileAttrList))
                         {
                             char[] trimChars = { ',', ' ' };
                             fileAttrList = fileAttrList.TrimEnd(trimChars);
@@ -435,7 +435,7 @@ namespace WDAC_Wizard
             }
 
             // Show any AppId Tags
-            if(this.Policy.siPolicy.PolicyType == global::PolicyType.AppIDTaggingPolicy)
+            if (this.Policy.siPolicy.PolicyType == global::PolicyType.AppIDTaggingPolicy)
             {
                 foreach (SigningScenario scenario in this.Policy.siPolicy.SigningScenarios)
                 {
@@ -456,10 +456,10 @@ namespace WDAC_Wizard
                 }
             }
 
-           // Finally, show any COM Object rules
-           if (this.Policy.siPolicy.Settings != null)
+            // Finally, show any COM Object rules
+            if (this.Policy.siPolicy.Settings != null)
             {
-                foreach(var setting in this.Policy.siPolicy.Settings)
+                foreach (var setting in this.Policy.siPolicy.Settings)
                 {
                     // Don't show Policy.Id or Policy.Name settings
                     if (!(setting.Provider == "PolicyInfo"
@@ -496,46 +496,46 @@ namespace WDAC_Wizard
             else // New Policy
             {
                 // Base Policy - Read from Template Path
-                if(this._MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy
+                if (this._MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy
                     || _MainWindow.Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                 {
-                    this.XmlPath = this._MainWindow.Policy.TemplatePath; 
+                    this.XmlPath = this._MainWindow.Policy.TemplatePath;
                 }
-                
+
                 // Supplemental Policy - Read from Empty_Supplemental.xml
                 else
                 {
                     this.XmlPath = Path.Combine(this._MainWindow.ExeFolderPath, "Templates", Properties.Resources.EmptyWdacSupplementalXml);
                 }
             }
-                
+
             Logger.Log.AddInfoMsg("--- Reading Set Signing Rules Beginning ---");
-            Logger.Log.AddInfoMsg("Reading file rules from path: " + this.XmlPath); 
+            Logger.Log.AddInfoMsg("Reading file rules from path: " + this.XmlPath);
 
             try
             {
                 // Read File
-                this.Policy.siPolicy = Helper.DeserializeXMLtoPolicy(this.XmlPath); 
-            } 
+                this.Policy.siPolicy = Helper.DeserializeXMLtoPolicy(this.XmlPath);
+            }
             catch (Exception exp)
             {
                 Logger.Log.AddErrorMsg("ReadSetRules() has encountered an error: ", exp);
                 // Prompt user for additional confirmation
                 DialogResult res = MessageBox.Show("The Wizard is unable to read your CI policy xml file. The policy XML is corrupted. ",
-                                                    "Parsing Error", 
-                                                    MessageBoxButtons.OK, 
+                                                    "Parsing Error",
+                                                    MessageBoxButtons.OK,
                                                     MessageBoxIcon.Error);
 
                 if (res == DialogResult.OK)
                 {
                     this._MainWindow.ResetWorkflow(sender, e);
                 }
-                return false; 
+                return false;
             }
-            
+
             BubbleUp(); // all original signing rules are set in MainWindow object - ...
                         //all mutations to rules are from here on completed using cmdlets
-            return true; 
+            return true;
         }
 
         /// <summary>
@@ -544,12 +544,12 @@ namespace WDAC_Wizard
         private void SetBlocklistStates()
         {
             // Determine whether to show the checkboxes - hide if new/editing a supplemental policy
-            if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
+            if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
                 || Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
             {
                 this.checkBox_KernelList.Visible = false;
                 this.checkBox_UserModeList.Visible = false;
-                return; 
+                return;
             }
             else
             {
@@ -558,13 +558,13 @@ namespace WDAC_Wizard
             }
 
             // Recommended Kernel Driver Blocklist
-            if(Properties.Settings.Default.useDriverBlockRules)
+            if (Properties.Settings.Default.useDriverBlockRules)
             {
-                this.checkBox_KernelList.Checked = true; 
+                this.checkBox_KernelList.Checked = true;
             }
             else
             {
-                this.checkBox_KernelList.Checked = false; 
+                this.checkBox_KernelList.Checked = false;
             }
 
             // Recommended User Mode Blocklist
@@ -584,16 +584,16 @@ namespace WDAC_Wizard
         private void BubbleUp()
         {
             // Passing rule, signing scenarios, etc datastructs to MainWindow class
-           this._MainWindow.Policy.CISigners = this.Policy.CISigners;
-           this._MainWindow.Policy.EKUs = this.Policy.EKUs;
-           this._MainWindow.Policy.FileRules = this.Policy.FileRules;
-           this._MainWindow.Policy.Signers = this.Policy.Signers;
-           this._MainWindow.Policy.SigningScenarios = this.Policy.SigningScenarios;
-           this._MainWindow.Policy.UpdateSigners = this.Policy.UpdateSigners;
-           this._MainWindow.Policy.SupplementalSigners = this.Policy.SupplementalSigners;
-           this._MainWindow.Policy.CISigners = this.Policy.CISigners;
-           this._MainWindow.Policy.PolicySettings = this.Policy.PolicySettings;
-           this._MainWindow.Policy.CustomRules = this.Policy.CustomRules;
+            this._MainWindow.Policy.CISigners = this.Policy.CISigners;
+            this._MainWindow.Policy.EKUs = this.Policy.EKUs;
+            this._MainWindow.Policy.FileRules = this.Policy.FileRules;
+            this._MainWindow.Policy.Signers = this.Policy.Signers;
+            this._MainWindow.Policy.SigningScenarios = this.Policy.SigningScenarios;
+            this._MainWindow.Policy.UpdateSigners = this.Policy.UpdateSigners;
+            this._MainWindow.Policy.SupplementalSigners = this.Policy.SupplementalSigners;
+            this._MainWindow.Policy.CISigners = this.Policy.CISigners;
+            this._MainWindow.Policy.PolicySettings = this.Policy.PolicySettings;
+            this._MainWindow.Policy.CustomRules = this.Policy.CustomRules;
 
         }
 
@@ -607,13 +607,13 @@ namespace WDAC_Wizard
 
             // Determine whether the user is deleting one row or multiple rows
             int numRowsSelected = this.rulesDataGrid.SelectedRows.Count;
-            string userPromptMsg; 
+            string userPromptMsg;
 
-            if(numRowsSelected < 1)
+            if (numRowsSelected < 1)
             {
-                return; 
+                return;
             }
-            else if(numRowsSelected == 1)
+            else if (numRowsSelected == 1)
             {
                 // Exactly one row/rule to delete
                 int rowIdx = this.rulesDataGrid.SelectedRows[0].Index;
@@ -624,7 +624,7 @@ namespace WDAC_Wizard
                 if (String.IsNullOrEmpty(type)
                     && String.IsNullOrEmpty(level))
                 {
-                    return; 
+                    return;
                 }
 
                 userPromptMsg = String.Format("Are you sure you want to delete this rule?\n'{0}'", (String)this.rulesDataGrid["Column_Name", rowIdx].Value);
@@ -636,9 +636,9 @@ namespace WDAC_Wizard
             }
 
             // Prompt the user for additional deletion confirmation
-            DialogResult res = MessageBox.Show(userPromptMsg, 
-                                                "Rule Deletion Confirmation", 
-                                                MessageBoxButtons.YesNo, 
+            DialogResult res = MessageBox.Show(userPromptMsg,
+                                                "Rule Deletion Confirmation",
+                                                MessageBoxButtons.YesNo,
                                                 MessageBoxIcon.Question);
 
             if (res == DialogResult.No)
@@ -649,7 +649,7 @@ namespace WDAC_Wizard
 
             // Creates background worker to display updates to UI
             this.panel_Progress.Visible = true;
-            this.panel_Progress.BringToFront(); 
+            this.panel_Progress.BringToFront();
 
             if (!this.backgroundWorkerRulesDeleter.IsBusy)
             {
@@ -663,7 +663,7 @@ namespace WDAC_Wizard
         /// <param name="rowIdxs"></param>
         private void DeleteRowsFromRulesTable(List<int> rowIdxs)
         {
-            foreach(int rowIdx in rowIdxs)
+            foreach (int rowIdx in rowIdxs)
             {
                 DeleteRowFromRulesTable(rowIdx);
             }
@@ -679,7 +679,7 @@ namespace WDAC_Wizard
             int customRuleIdx = -1;
             List<string> ruleIDsToRemove = new List<string>();
 
-            if (rowIdx >= this.rulesDataGrid.RowCount) return; 
+            if (rowIdx >= this.rulesDataGrid.RowCount) return;
 
             string type = (String)this.rulesDataGrid["Column_Action", rowIdx].Value;
             string level = (String)this.rulesDataGrid["Column_Level", rowIdx].Value;
@@ -696,7 +696,7 @@ namespace WDAC_Wizard
             string ruleId = (String)this.rulesDataGrid["column_ID", rowIdx].Value;
             string ruleKey = (String)this.rulesDataGrid["Column_Files", rowIdx].Value;
 
-            Logger.Log.AddInfoMsg(String.Format("Removing Row: {0} with Name: {1} and ID: {2}", rowIdx.ToString(), ruleName, ruleId)); 
+            Logger.Log.AddInfoMsg(String.Format("Removing Row: {0} with Name: {1} and ID: {2}", rowIdx.ToString(), ruleName, ruleId));
 
             // Remove from table iff sucessful re-serialization
             // Remove from DisplayObject
@@ -782,7 +782,7 @@ namespace WDAC_Wizard
                 }
 
                 // Handle AppID Tags
-                if(ruleType == "AppID Tag")
+                if (ruleType == "AppID Tag")
                 {
                     string value = ruleKey.Split(':')[1].Trim();
                     string key = ruleName.Split(':')[1].Trim();
@@ -791,14 +791,14 @@ namespace WDAC_Wizard
 
                     foreach (var scenario in Policy.siPolicy.SigningScenarios)
                     {
-                        if(scenario.AppIDTags != null)
+                        if (scenario.AppIDTags != null)
                         {
                             foreach (var tag in scenario.AppIDTags.AppIDTag)
                             {
-                                if(tag.Value == value && tag.Key == key)
+                                if (tag.Value == value && tag.Key == key)
                                 {
                                     tagIdx = numIdx;
-                                    Logger.Log.AddInfoMsg($"Removing AppID Tag - Key: {key}, Value:{value}"); 
+                                    Logger.Log.AddInfoMsg($"Removing AppID Tag - Key: {key}, Value:{value}");
                                     break;
                                 }
                                 else
@@ -810,9 +810,9 @@ namespace WDAC_Wizard
                             // Check if we assigned a value to settingIdx, remove that AppID Tag from the AppIDTags[] array
                             if (tagIdx != -1)
                             {
-                                AppIDTag[] tempTags = this.Policy.siPolicy.SigningScenarios[0].AppIDTags.AppIDTag; 
+                                AppIDTag[] tempTags = this.Policy.siPolicy.SigningScenarios[0].AppIDTags.AppIDTag;
 
-                                if(tempTags.Length == 1)
+                                if (tempTags.Length == 1)
                                 {
                                     this.Policy.siPolicy.SigningScenarios[0].AppIDTags = null;
                                 }
@@ -1037,9 +1037,9 @@ namespace WDAC_Wizard
         private void RemoveSignerIdFromCiSigners(string signerId)
         {
             // Verify that CiSigners is not null. Few policies have a CiSigners section
-            if(this.Policy.siPolicy.CiSigners == null)
+            if (this.Policy.siPolicy.CiSigners == null)
             {
-                return; 
+                return;
             }
 
             int numIdex = 0;
@@ -1051,7 +1051,7 @@ namespace WDAC_Wizard
                 {
                     this.Policy.siPolicy.CiSigners = this.Policy.siPolicy.CiSigners
                         .Where((val, idx) => idx != numIdex).ToArray();
-                    
+
                     // If removed the last CiSigners ref, set the CiSigners to null to serialize
                     if (this.Policy.siPolicy.CiSigners.Length == 0)
                     {
@@ -1074,7 +1074,7 @@ namespace WDAC_Wizard
         /// <param name="ruleId"></param>
         private void RemoveRuleIdFromFileAttribs(string ruleId)
         {
-            int numIdex = 0; 
+            int numIdex = 0;
 
             if (this.Policy.siPolicy.SigningScenarios == null)
                 return;
@@ -1094,9 +1094,9 @@ namespace WDAC_Wizard
                             Where((val, idx) => idx != numIdex).ToArray();
                         Logger.Log.AddInfoMsg(String.Format("Removing fileRef ID: {0}", ruleId));
 
-                        if(scenario.ProductSigners.FileRulesRef.FileRuleRef.Length == 0)
+                        if (scenario.ProductSigners.FileRulesRef.FileRuleRef.Length == 0)
                         {
-                            scenario.ProductSigners.FileRulesRef = null; 
+                            scenario.ProductSigners.FileRulesRef = null;
                         }
                         break;
                     }
@@ -1124,7 +1124,7 @@ namespace WDAC_Wizard
             }
             else
             {
-                if(e.RowIndex  < this.displayObjects.Count)
+                if (e.RowIndex < this.displayObjects.Count)
                 {
                     displayObject = (DisplayObject)this.displayObjects[e.RowIndex];
                 }
@@ -1159,7 +1159,7 @@ namespace WDAC_Wizard
 
                 case "column_ID":
                     e.Value = displayObject.Id;
-                    break; 
+                    break;
             }
         }
 
@@ -1169,11 +1169,11 @@ namespace WDAC_Wizard
         /// <param name="displayObjectArray"></param>
         /// <param name="customRule"></param>
         /// <param name="warnUser"></param>
-        public void AddRuleToTable(string [] displayObjectArray, PolicyCustomRules customRule, bool warnUser)
+        public void AddRuleToTable(string[] displayObjectArray, PolicyCustomRules customRule, bool warnUser)
         {
             // Attach the int row number we added it to
             customRule.RowNumber = this.rulesDataGrid.RowCount - 1;
-            string action = displayObjectArray[0]; 
+            string action = displayObjectArray[0];
             string level = displayObjectArray[1];
             string name = warnUser ? "*Hash Fallback Possible* " + displayObjectArray[2] : displayObjectArray[2];
             string files = displayObjectArray[3];
@@ -1218,10 +1218,10 @@ namespace WDAC_Wizard
 
             // Close the custom Rule Conditions Panel
             // Set RuleInEdit to false to not trigger another confirmation from user on FormClosing()
-            this.customRuleConditionsPanel.RuleInEdit = false; 
+            this.customRuleConditionsPanel.RuleInEdit = false;
             this.customRuleConditionsPanel.Close();
             this.customRuleConditionsPanel = null;
-            this._MainWindow.CustomRuleinProgress = false; 
+            this._MainWindow.CustomRuleinProgress = false;
         }
 
         /// <summary>
@@ -1242,7 +1242,7 @@ namespace WDAC_Wizard
         private void CheckBox_KernelList_CheckedChanged(object sender, EventArgs e)
         {
             // If checked, create a policy with the recommended driver block rules
-            if(this.checkBox_KernelList.Checked)
+            if (this.checkBox_KernelList.Checked)
             {
                 this.Policy.UseKernelModeBlocks = true;
             }
@@ -1300,7 +1300,7 @@ namespace WDAC_Wizard
         {
             // Hide progress panel
             this.panel_Progress.Visible = false;
-            this.panel_Progress.SendToBack(); 
+            this.panel_Progress.SendToBack();
         }
 
         /// <summary>
@@ -1369,15 +1369,15 @@ namespace WDAC_Wizard
                     {
                         button.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
                         button.FlatAppearance.BorderSize = 0;
-                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
                         button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                         button.ForeColor = System.Drawing.Color.DodgerBlue;
                         button.BackColor = System.Drawing.Color.Transparent;
                     }
 
                     // Panels
-                    else if(control is Panel panel
+                    else if (control is Panel panel
                         && (panel.Tag == null || panel.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
                         panel.ForeColor = Color.White;
@@ -1385,7 +1385,7 @@ namespace WDAC_Wizard
                     }
 
                     // Checkboxes
-                    else if(control is CheckBox checkBox
+                    else if (control is CheckBox checkBox
                         && (checkBox.Tag == null || checkBox.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag))
                     {
                         checkBox.ForeColor = Color.White;
@@ -1405,8 +1405,8 @@ namespace WDAC_Wizard
                     {
                         button.FlatAppearance.BorderColor = System.Drawing.Color.Black;
                         button.FlatAppearance.BorderSize = 0;
-                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                        button.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                        button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
                         button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                         button.ForeColor = System.Drawing.Color.FromArgb(16, 110, 190);
                         button.BackColor = System.Drawing.Color.Transparent;
@@ -1445,7 +1445,7 @@ namespace WDAC_Wizard
                     if (label.Tag == null || label.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
                         label.ForeColor = Color.White;
-                        label.BackColor = Color.FromArgb(15,15,15);
+                        label.BackColor = Color.FromArgb(15, 15, 15);
                     }
                 }
             }
@@ -1567,6 +1567,11 @@ namespace WDAC_Wizard
                 // Grid lines
                 rulesDataGrid.GridColor = Color.Black;
             }
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

@@ -124,19 +124,16 @@
   <data name="home_Button.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
-        pQAAAKUBcMTeVQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAF0SURBVEhL7dQv
-        S4NRFMfxZxP/MRARYRZnUVgxmDSu+QIWlgaGvQXNvgKDxUWLVVEw+AIEQSyCRTAoYtIgIiZ5/P7kXDn3
-        4TrG0KQHPnLv+XfHhGV5nv+qZPInJZMpRAV7ppLqSUkmi4g6rqCL6FxP9RYlkx7RwgvC8kC5lvUc4Mxs
-        RPP+4hEj2EZYKKfG59Rz7+7daI+/fCWzbBb6NGFItjBsdPY1r/cDxCoerVme0bTauti5CdVCX5B+gChj
-        E+8IzZdYwAT2LSc6K6eaekJejlCKHiCmcQLfuItxLOLacp5yqqlHvb52jCnbna3gDqH4ho4V23hFqBWp
-        1rbeDjQbardYRvTJb7CEUXQt148daEaz2hHy2p1V8YBDTGIO5/AL+qEZzWqHdmlnNfwPaihhHk8oDvdL
-        s9qhXbXP3foTEA34gUE0op3RpfcD+m7Dz8GF5VIGfmDN9c24fNH/Azr+5Qf0izr2jaFCb6pHylGfv/y8
-        PPsAJpSneD5xJSgAAAAASUVORK5CYII=
+        pQAAAKUBcMTeVQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFtSURBVEhL7dS9
+        Sh1RFMXxn4pfCBJCQBu1UbCxSBVLOx/AwkpI4Sto7RNY2GhpY6soWPgAAUFsBJtAiohYaSEiVuHKxjNw
+        nHtGr0Q7iz+c2WvttYaZYbRaLR9J2+C9aRs0gSHsJIbqehNtgxKYxjniIojzdN1Xom1QB4u4y8IrYraY
+        PHs4Tqx2VIA+bNRCfyXyWXgus+utVwswlu4mD1pHbyLOuZbzcgHmcZ0t3GIhaStBOi8krbMCdGMN/zLz
+        GaYwjN1sHueYhRaevOAAXc8K8A1HNeM2BjGD34U7jVlo4Qlvrh3ia8o2i4tMfMByEpdwXwivCG0peZfT
+        bqX9xY8Q8jv/g+/oj2dZCGxiM+3EbmRU88g2givs4wsmcFIIeY3Yid3IiKzIHKnewXi8GEziprDcKbEb
+        GZE1/uwrSkVzhaW3Mlf8TDsoiGdb/Q5OC/p/F/zMfKMF/bPgs+BpMf6oAw301Lx1vaK7seAjeAQmlKd4
+        olR67QAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="$this.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>62</value>
   </metadata>

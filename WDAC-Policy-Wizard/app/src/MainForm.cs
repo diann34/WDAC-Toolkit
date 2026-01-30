@@ -37,7 +37,7 @@ namespace WDAC_Wizard
         private BuildPage _BuildPage;
         private SigningRules_Control _SigningRulesControl;
         public EditWorkflowType EditWorkflow;
-        public SiPolicy EventLogPolicy; 
+        public SiPolicy EventLogPolicy;
 
         public enum EditWorkflowType
         {
@@ -48,8 +48,8 @@ namespace WDAC_Wizard
         public MainWindow()
         {
             this.TempFolderPath = CreateTempFolder();
-            Logger.NewLogger(this.TempFolderPath); 
-            
+            Logger.NewLogger(this.TempFolderPath);
+
             InitializeComponent();
 
             // Init MainWindow params
@@ -59,14 +59,14 @@ namespace WDAC_Wizard
             this.nCustomValueRules = 0;
 
             this.Policy = new WDAC_Policy();
-            this.CiEvents = new List<CiEvent>(); 
+            this.CiEvents = new List<CiEvent>();
             this.PageList = new List<string>();
             this.ExeFolderPath = Helper.GetExecutablePath(false);
 
-            this.CustomRuleinProgress = false; 
+            this.CustomRuleinProgress = false;
 
             // Check for configci cmdlet availability
-            Helper.LicenseCheck(); 
+            Helper.LicenseCheck();
         }
 
         // ###############
@@ -83,14 +83,14 @@ namespace WDAC_Wizard
             if (!this.ConfigInProcess)
             {
                 Logger.Log.AddNewSeparationLine("Workflow -- New Policy Selected");
-                this.view = 1; 
+                this.view = 1;
                 this.CurrentPage = 1;
                 this.ConfigInProcess = true;
                 this.RedoFlowRequired = false;
                 this.Policy.PolicyWorkflow = WDAC_Policy.Workflow.New;
                 this.Policy._PolicyType = WDAC_Policy.PolicyType.BasePolicy;
 
-                PageController(sender, e); 
+                PageController(sender, e);
                 button_Next.Visible = true;
             }
 
@@ -106,7 +106,7 @@ namespace WDAC_Wizard
             }
         }
 
-        
+
         /// <summary>
         /// Edit policy button selected: User can load a pre-exisiting policy on disk and 
         /// view and reconfigure its rules and settings. 
@@ -114,12 +114,12 @@ namespace WDAC_Wizard
         private void Button_Edit_Click(object sender, EventArgs e)
         {
             // Edit Policy Button:
-           
+
             if (!this.ConfigInProcess)
             {
                 Logger.Log.AddNewSeparationLine("Workflow -- Edit Policy Selected");
                 this.view = 2;
-                this.CurrentPage = 1; 
+                this.CurrentPage = 1;
                 this.ConfigInProcess = true;
                 this.Policy.PolicyWorkflow = WDAC_Policy.Workflow.Edit;
 
@@ -194,12 +194,12 @@ namespace WDAC_Wizard
                 if (res == DialogResult.Yes)
                 {
                     // Close the CustomRuleConditionsPanel
-                    this._SigningRulesControl.CloseCustomRulesPanel(); 
+                    this._SigningRulesControl.CloseCustomRulesPanel();
                 }
                 else
                 {
                     // Do not return home
-                    return; 
+                    return;
                 }
             }
 
@@ -208,12 +208,12 @@ namespace WDAC_Wizard
 
             // Reset flags
             this.ConfigInProcess = false;
-            this.CustomRuleinProgress = false; 
+            this.CustomRuleinProgress = false;
             this.view = 0;
             this.CurrentPage = 0;
             Logger.NewLogger(this.TempFolderPath);
 
-            RemoveControls(); 
+            RemoveControls();
             ShowControlPanel(sender, e);
         }
         /// <summary>
@@ -223,12 +223,12 @@ namespace WDAC_Wizard
         {
             Logger.Log.AddInfoMsg("Workflow -- Settings Button Selected");
             this.button_Next.Visible = false;
-            this.CurrentPage = 99; 
+            this.CurrentPage = 99;
 
             var _SettingsPage = new SettingsPage(this);
-            _SettingsPage.Name = "SettingsPage"; 
+            _SettingsPage.Name = "SettingsPage";
             this.Controls.Add(_SettingsPage);
-            this.PageList.Add(_SettingsPage.Name); 
+            this.PageList.Add(_SettingsPage.Name);
             _SettingsPage.BringToFront();
             _SettingsPage.Focus();
 
@@ -244,11 +244,11 @@ namespace WDAC_Wizard
             if (!this.ErrorOnPage)
             {
                 // Check that a custom rule is not in progress
-                if(this.CustomRuleinProgress)
+                if (this.CustomRuleinProgress)
                 {
-                    DialogResult res = MessageBox.Show("Do you want to create this custom rule before building your policy?", 
-                        "Confirmation", 
-                        MessageBoxButtons.YesNo, 
+                    DialogResult res = MessageBox.Show("Do you want to create this custom rule before building your policy?",
+                        "Confirmation",
+                        MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question);
 
                     if (res == DialogResult.Yes)
@@ -258,11 +258,11 @@ namespace WDAC_Wizard
                 this.CurrentPage++;
                 PageController(sender, e);
             }
-                
+
             else
-                DisplayInfoText(99); 
+                DisplayInfoText(99);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -272,14 +272,14 @@ namespace WDAC_Wizard
         {
             // Get the button name, extract the number of page user wants, set to CurrPage
             string buttonName = ((Button)sender).Name;
-            int desiredPage = Convert.ToInt32(buttonName.Substring(4,1)); //eg. Page4_Button --> 4
+            int desiredPage = Convert.ToInt32(buttonName.Substring(4, 1)); //eg. Page4_Button --> 4
 
             if (this.CurrentPage == desiredPage)
-                return; 
+                return;
             this.CurrentPage = desiredPage;
 
             // If settings page was previous, re-enable Next button
-            this.button_Next.Visible = true; 
+            this.button_Next.Visible = true;
             PageController(sender, e);
         }
 
@@ -290,22 +290,23 @@ namespace WDAC_Wizard
         public void PageController(object sender, EventArgs e)
         {
             DisplayInfoText(0);
-            
+
             //RemoveControls(); 
 
             // Get pertitent workflow
-            switch (this.CurrentPage){
-            // Home page
-            case 0:
-                break;
+            switch (this.CurrentPage)
+            {
+                // Home page
+                case 0:
+                    break;
 
-            // 1st page
-            case 1:
+                // 1st page
+                case 1:
                     // New Workflow
                     if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New)
                     {
                         // New Base Policy Workflow
-                        if(this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+                        if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
                         {
                             // New view - load choose base vs supplemental
                             string pageKey = "PolicyTypePage";
@@ -330,7 +331,7 @@ namespace WDAC_Wizard
                             break;
                         }
 
-                        else if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
+                        else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                         {
                             // New view - load choose base vs supplemental
                             string pageKey = "PolicyTypePage";
@@ -356,11 +357,11 @@ namespace WDAC_Wizard
                     }
 
                     // Edit Workflow
-                    else if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
+                    else if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
                     {
                         // view & edit mode
                         // Show policy rules UI
-                        string pageKey  = "EditWorkflowPage";
+                        string pageKey = "EditWorkflowPage";
                         if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, launch instance
                         {
                             Control[] _Pages = this.Controls.Find(pageKey, true);
@@ -382,9 +383,9 @@ namespace WDAC_Wizard
                     }
 
                     // Merge Workflow
-                    else if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Merge)
+                    else if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Merge)
                     {
-                        string pageKey  = "MergePage";
+                        string pageKey = "MergePage";
                         if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, launch instance
                         {
                             Control[] _Pages = this.Controls.Find(pageKey, true);
@@ -405,9 +406,9 @@ namespace WDAC_Wizard
                         ShowControlPanel(sender, e);
                     }
 
-            break; // end of 1st page
+                    break; // end of 1st page
 
-            case 2: // 2nd Page
+                case 2: // 2nd Page
 
                     // New Workflow
                     if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New)
@@ -440,7 +441,7 @@ namespace WDAC_Wizard
                         else //if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                         {
                             // New SUPPLEMENTAL policy -> policy rules. Do not present a template page
-                            string pageKey  = "SupConfigTemplatePage";
+                            string pageKey = "SupConfigTemplatePage";
                             if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
                             {
                                 Control[] _Pages = this.Controls.Find(pageKey, true);
@@ -503,7 +504,7 @@ namespace WDAC_Wizard
                     {
                         button_Next.Visible = false;
 
-                        string pageKey  = "BuildPage";
+                        string pageKey = "BuildPage";
                         if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
                         {
                             Control[] _Pages = this.Controls.Find(pageKey, true);
@@ -524,16 +525,16 @@ namespace WDAC_Wizard
                         ProcessPolicy();
                     }
 
-            break; // end of 2nd page
-                        
+                    break; // end of 2nd page
 
-            // 3rd Page
-            case 3:
+
+                // 3rd Page
+                case 3:
                     // New policy workflow
                     if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New)
                     {
                         // New Base
-                        if(this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+                        if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
                         {
                             string pageKey = "ConfigTemplatePage";
                             if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
@@ -557,7 +558,7 @@ namespace WDAC_Wizard
                         }
 
                         // New Supplemental
-                        if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
+                        if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy
                             || Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                         {
                             string pageKey = "SupSigningRulesPage";
@@ -583,7 +584,7 @@ namespace WDAC_Wizard
                     }
 
                     // Edit policy workflow
-                    else if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
+                    else if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
                     {
                         // Edit & view mode
                         string pageKey = "SigningRulesPage";
@@ -624,10 +625,10 @@ namespace WDAC_Wizard
                         ShowControlPanel(sender, e);
                     }
 
-                break;
+                    break;
 
-            // 4th Page
-            case 4:
+                // 4th Page
+                case 4:
                     // New policy workflow
                     if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New)
                     {
@@ -662,7 +663,7 @@ namespace WDAC_Wizard
                         {
                             // New SUPPLEMENTAL policy -- build out policy
 
-                            string pageKey  = "BuildPage";
+                            string pageKey = "BuildPage";
                             if (this.PageList.Contains(pageKey) && !this.RedoFlowRequired) //already been here, show instance
                             {
                                 Control[] _Pages = this.Controls.Find(pageKey, true);
@@ -713,13 +714,13 @@ namespace WDAC_Wizard
                         ProcessPolicy();
                     }
 
-                break;
+                    break;
 
-            // 5th Page
-            case 5:
-                if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New 
-                    && this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
-                {
+                // 5th Page
+                case 5:
+                    if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New
+                        && this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+                    {
                         // Build out the policy - begin PS execution
 
                         button_Next.Visible = false;
@@ -744,8 +745,8 @@ namespace WDAC_Wizard
 
                         ShowControlPanel(sender, e);
                         ProcessPolicy();
-                }
-            break;
+                    }
+                    break;
 
             } // End of Switch
         }
@@ -757,7 +758,7 @@ namespace WDAC_Wizard
         private void ProcessPolicy()
         {
             // Short circuit policy building if using Event Log workflow
-            if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit 
+            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit
                 && this.EditWorkflow == EditWorkflowType.EventLog)
             {
                 ProcessEventLogPolicy();
@@ -773,8 +774,8 @@ namespace WDAC_Wizard
             {
                 Logger.Log.AddErrorMsg("Process Policy() caught the following exception ", e);
             }
-           
-            Logger.Log.AddNewSeparationLine("Workflow -- Building Policy Underway"); 
+
+            Logger.Log.AddNewSeparationLine("Workflow -- Building Policy Underway");
 
             // Write all policy, file and signer rules to xml files:
             if (!backgroundWorker1.IsBusy)
@@ -790,8 +791,8 @@ namespace WDAC_Wizard
             BackgroundWorker worker = sender as BackgroundWorker;
 
             // Flag to skip policy conversion in the case of signed policy without PolicySigners section
-            bool skipPolicyConversion = false; 
-            
+            bool skipPolicyConversion = false;
+
             // Use an SiPolicy object to store all new file and signer rules
             SiPolicy siPolicyNewRules = Helper.DeserializeXMLStringtoPolicy(Resources.EmptyWDAC);
 
@@ -799,12 +800,13 @@ namespace WDAC_Wizard
             {
                 // Add trust for Signed Scripts
                 bool success = PSCmdlets.AddPSSigner();
-                if (!success) {
+                if (!success)
+                {
                     // Commenting out this feature - leaving here to potentially re-enable 
                     // GitHub Issue #480
                     //ShowPSTrustFailureUI();
                 }
-                
+
                 // Handle custom value rules: 
                 siPolicyNewRules = ProcessCustomValueRules(worker, siPolicyNewRules);
 
@@ -822,13 +824,13 @@ namespace WDAC_Wizard
 
                 // Handle AppID Tags
                 SetAppIDPolicyTags(worker);
-                
+
                 // Set additional parameters: policy name, GUIDs, version, etc
                 SetAdditionalParameters(worker);
             }
 
             // Handle the merge workflow
-            if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Merge)
+            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Merge)
             {
                 MergePolicies_MergeControl(worker);
             }
@@ -862,7 +864,7 @@ namespace WDAC_Wizard
             else if (progressPercent <= 95)
                 process = "Merging custom rules with template policies ...";
             else
-                process = "Setting additional parameters ..."; 
+                process = "Setting additional parameters ...";
 
             this._BuildPage.UpdateProgressBar(e.ProgressPercentage, process);
         }
@@ -882,7 +884,7 @@ namespace WDAC_Wizard
             Logger.Log.AddNewSeparationLine("Workflow -- DONE");
 
             // Close the log file.At the end of the workflow
-            Logger.Log.CloseLogger(); 
+            Logger.Log.CloseLogger();
 
             // Check for error and show the error UI on the build page
             if (e.Error != null)
@@ -901,7 +903,7 @@ namespace WDAC_Wizard
                 }
                 else
                 {
-                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath); 
+                    this._BuildPage.ShowFinishMsg(this.Policy.SchemaPath);
                 }
             }
 
@@ -925,14 +927,14 @@ namespace WDAC_Wizard
             try
             {
                 finalPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
-                if(finalPolicy == null)
+                if (finalPolicy == null)
                 {
                     return;
                 }
             }
             catch (Exception e)
             {
-                Logger.Log.AddErrorMsg("Create Policy Rule Options -- parsing OutputSchema.xml encountered the following error ", e); 
+                Logger.Log.AddErrorMsg("Create Policy Rule Options -- parsing OutputSchema.xml encountered the following error ", e);
             }
 
             // Policy Rule Options derived from the final state of the rules page
@@ -940,7 +942,7 @@ namespace WDAC_Wizard
 
             // Assert supplemental policies and legacy policies cannot have the Supplemental (rule #17) option
             if (Policy.HasRuleOption(OptionType.EnabledAllowSupplementalPolicies)
-                && (this.Policy._Format == WDAC_Policy.Format.Legacy 
+                && (this.Policy._Format == WDAC_Policy.Format.Legacy
                     || this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy))
             {
                 Policy.RemoveRuleOption(OptionType.EnabledAllowSupplementalPolicies);
@@ -975,10 +977,10 @@ namespace WDAC_Wizard
 
             // Convert from List<RuleType> to RuleType[]
             RuleType[] ruleOptions = new RuleType[dedupedRuleOptions.Count];
-            for(int i = 0; i< ruleOptions.Length; i++)
+            for (int i = 0; i < ruleOptions.Length; i++)
             {
                 ruleOptions[i] = dedupedRuleOptions[i];
-                Logger.Log.AddInfoMsg("Adding " + dedupedRuleOptions[i].Item); 
+                Logger.Log.AddInfoMsg("Adding " + dedupedRuleOptions[i].Item);
             }
 
             try
@@ -1002,9 +1004,9 @@ namespace WDAC_Wizard
         {
             // Iterate through all the custom rules for the COM object rules only
             List<COM> comObjectRules = new List<COM>();
-            foreach(var rule in this.Policy.CustomRules)
+            foreach (var rule in this.Policy.CustomRules)
             {
-                if(rule.COMObject.Guid != null)
+                if (rule.COMObject.Guid != null)
                 {
                     comObjectRules.Add(rule.COMObject);
                     Logger.Log.AddInfoMsg(String.Format("Creating COM {0} Rule for Provider={1} and Key={2}",
@@ -1015,10 +1017,10 @@ namespace WDAC_Wizard
             }
 
             // Return if no COM rules were created
-            if(comObjectRules.Count == 0)
+            if (comObjectRules.Count == 0)
             {
-                worker.ReportProgress(98); 
-                return; 
+                worker.ReportProgress(98);
+                return;
             }
 
             // Manipulate the final policy on disk as oppposed to any temp policies
@@ -1043,7 +1045,7 @@ namespace WDAC_Wizard
         public void SetAppIDPolicyTags(BackgroundWorker worker)
         {
             // Skip if this is not an AppID Tagging Policy - no AppID Tags to process
-            if(this.Policy._PolicyType != WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+            if (this.Policy._PolicyType != WDAC_Policy.PolicyType.AppIdTaggingPolicy)
             {
                 worker.ReportProgress(99);
                 return;
@@ -1099,9 +1101,9 @@ namespace WDAC_Wizard
             // 5. Format IDs in the case of Issue #247
 
             Logger.Log.AddInfoMsg("-- Set Additional Parameters --");
-            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath); 
+            SiPolicy siPolicy = Helper.DeserializeXMLtoPolicy(this.Policy.SchemaPath);
 
-            if(siPolicy == null)
+            if (siPolicy == null)
             {
                 return;
             }
@@ -1112,9 +1114,9 @@ namespace WDAC_Wizard
                 // Set policy info - ID, Name
                 // Serialize the policy back to XML so settings persist after GUID reset
                 siPolicy.Settings = PolicyHelper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID);
-                Helper.SerializePolicytoXML(siPolicy, this.Policy.SchemaPath); 
+                Helper.SerializePolicytoXML(siPolicy, this.Policy.SchemaPath);
 
-                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy 
+                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy
                     && this.Policy._Format == WDAC_Policy.Format.MultiPolicy)
                 {
                     // Run Set-CIPolicyIdInfo -ResetPolicyID to force the policy into multiple policy format
@@ -1128,7 +1130,7 @@ namespace WDAC_Wizard
                     siPolicy.PolicyID = siPolicy.BasePolicyID;
 
                     // Force SiPolicy PolicyType to BasePolicy
-                    siPolicy.PolicyType = global::PolicyType.BasePolicy; 
+                    siPolicy.PolicyType = global::PolicyType.BasePolicy;
                     siPolicy.PolicyTypeSpecified = true;
 
                     // Remove PolicyTypeID, if applicable
@@ -1140,12 +1142,12 @@ namespace WDAC_Wizard
                 {
                     siPolicy.BasePolicyID = null;
                     siPolicy.PolicyID = null;
-                    siPolicy.PolicyTypeSpecified = false; 
-                    siPolicy.PolicyTypeID = Properties.Resources.LegacyPolicyID_GUID; 
+                    siPolicy.PolicyTypeSpecified = false;
+                    siPolicy.PolicyTypeID = Properties.Resources.LegacyPolicyID_GUID;
                 }
 
                 // AppID Tagging Policy
-                else if(this.Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
+                else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.AppIdTaggingPolicy)
                 {
                     // Reset the GUIDs
                     siPolicy.BasePolicyID = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
@@ -1160,7 +1162,7 @@ namespace WDAC_Wizard
                 else if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy)
                 {
                     // User provided path to base policy XML
-                    if(this.Policy.BasePolicyId == Guid.Empty)
+                    if (this.Policy.BasePolicyId == Guid.Empty)
                     {
                         // Set BasePolicyID to match the Id of the linked base policy
                         siPolicy.BasePolicyID = Helper.DeserializeXMLtoPolicy(this.Policy.BaseToSupplementPath).BasePolicyID;
@@ -1174,7 +1176,7 @@ namespace WDAC_Wizard
                         // Set BasePolicyID to match the Id provided base policy ID
                         if (baseId.Contains("{"))
                         {
-                            siPolicy.BasePolicyID = baseId; 
+                            siPolicy.BasePolicyID = baseId;
                         }
                         else
                         {
@@ -1198,9 +1200,9 @@ namespace WDAC_Wizard
                 Logger.Log.AddInfoMsg("Additional parameters set - PolicyID: " + siPolicy.PolicyID);
 
                 // Log Policy settings set by the Wizard
-                foreach(var setting in siPolicy.Settings)
+                foreach (var setting in siPolicy.Settings)
                 {
-                    Logger.Log.AddInfoMsg(String.Format("Additional parameters set - Provider:{0} - Key:{1} - ValueName: {2} - Value:{3} ", 
+                    Logger.Log.AddInfoMsg(String.Format("Additional parameters set - Provider:{0} - Key:{1} - ValueName: {2} - Value:{3} ",
                         setting.Provider, setting.Key, setting.ValueName, setting.Value.Item));
                 }
             }
@@ -1209,7 +1211,7 @@ namespace WDAC_Wizard
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
                 // Set policy info - ID, Name
-                siPolicy.Settings = PolicyHelper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID); 
+                siPolicy.Settings = PolicyHelper.SetPolicyInfo(siPolicy.Settings, this.Policy.PolicyName, this.Policy.PolicyID);
                 siPolicy.VersionEx = this.Policy.VersionNumber;
 
                 Logger.Log.AddInfoMsg("Additional parameters set - Info.PolicyName to " + siPolicy.Settings[0].Value.Item);
@@ -1232,7 +1234,7 @@ namespace WDAC_Wizard
 
             try
             {
-                Helper.SerializePolicytoXML(siPolicy, this.Policy.SchemaPath); 
+                Helper.SerializePolicytoXML(siPolicy, this.Policy.SchemaPath);
             }
             catch (Exception e)
             {
@@ -1258,14 +1260,14 @@ namespace WDAC_Wizard
                 var customRule = this.Policy.CustomRules[i];
 
                 // Skip; already handled ALL custom value rules
-                if(customRule.UsingCustomValues)
+                if (customRule.UsingCustomValues)
                 {
                     continue;
                 }
 
                 // Skip the following rules that are handled by custom rules method -
                 // File Attributes, PFN rules, file/folder path rules
-                if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher 
+                if (!(customRule.Type == PolicyCustomRules.RuleType.Publisher
                       || customRule.Type == PolicyCustomRules.RuleType.Hash
                       || customRule.Type == PolicyCustomRules.RuleType.FolderScan
                       || customRule.Type == PolicyCustomRules.RuleType.Certificate))
@@ -1285,12 +1287,12 @@ namespace WDAC_Wizard
                     if (signerSiPolicy != null)
                     {
                         signerSiPolicy = PolicyHelper.AddSignerRuleAttributes(customRule, signerSiPolicy);
-                        siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);    
+                        siPolicy = PolicyHelper.MergePolicies(signerSiPolicy, siPolicy);
                     }
                 }
-                
+
                 // Hash Rules -- Invoke Powershell cmd to generate 
-                if(customRule.Type == PolicyCustomRules.RuleType.Hash)
+                if (customRule.Type == PolicyCustomRules.RuleType.Hash)
                 {
                     SiPolicy signerSiPolicy = PSCmdlets.CreatePolicyRuleFromPS(customRule, tmpPolicyPath);
 
@@ -1301,9 +1303,9 @@ namespace WDAC_Wizard
                 }
 
                 // Folder Scan -- Invoke the New-CiPolicy PS cmd to generate a CI policy
-                if(customRule.Type == PolicyCustomRules.RuleType.FolderScan)
+                if (customRule.Type == PolicyCustomRules.RuleType.FolderScan)
                 {
-                    SiPolicy signerSiPolicy; 
+                    SiPolicy signerSiPolicy;
                     if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
                     {
                         signerSiPolicy = PSCmdlets.CreateScannedPolicyFromPS(customRule, tmpPolicyPath);
@@ -1312,7 +1314,7 @@ namespace WDAC_Wizard
                     {
                         signerSiPolicy = PSCmdlets.CreateScannedPolicyFromPS(customRule, tmpPolicyPath, this.Policy.BaseToSupplementPath);
                     }
-                    
+
                     // Successful Scan completed
                     if (signerSiPolicy != null)
                     {
@@ -1321,7 +1323,7 @@ namespace WDAC_Wizard
                 }
 
                 // Certificate File Rule -- Invoke Add-SignerRule PS Cmd to generate a policy
-                if(customRule.Type == PolicyCustomRules.RuleType.Certificate)
+                if (customRule.Type == PolicyCustomRules.RuleType.Certificate)
                 {
                     // Copy EmptyWDAC.xml to tmpPolicyPath so Add-SignerRule has a policy which the signer rules can be added
                     File.Copy(Path.Combine(this.ExeFolderPath, "Templates", "EmptyWDAC.xml"), tmpPolicyPath);
@@ -1348,22 +1350,22 @@ namespace WDAC_Wizard
             // Iterate through all of the custom rules and PFN rules and update the progress bar    
             foreach (var customRule in this.Policy.CustomRules)
             {
-                if(customRule.UsingCustomValues)
+                if (customRule.UsingCustomValues)
                 {
                     siPolicyCustomValueRules = HandleCustomValues(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
-                else if(customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
+                else if (customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
                 {
                     siPolicyCustomValueRules = PolicyHelper.CreatePFNRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
-                else if(customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
+                else if (customRule.Type == PolicyCustomRules.RuleType.FileAttributes)
                 {
                     siPolicyCustomValueRules = PolicyHelper.CreateNonCustomFileAttributeRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
                 }
-                else if(customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.FolderPath)
+                else if (customRule.Type == PolicyCustomRules.RuleType.FilePath || customRule.Type == PolicyCustomRules.RuleType.FolderPath)
                 {
                     siPolicyCustomValueRules = PolicyHelper.CreateNonCustomFilePathRule(customRule, siPolicyCustomValueRules);
                     this.nCustomValueRules++;
@@ -1379,7 +1381,7 @@ namespace WDAC_Wizard
         /// </summary>
         public SiPolicy HandleCustomValues(PolicyCustomRules customRule, SiPolicy siPolicy)
         {
-            if(customRule.Type == PolicyCustomRules.RuleType.Publisher)
+            if (customRule.Type == PolicyCustomRules.RuleType.Publisher)
             {
                 siPolicy = PolicyHelper.CreateFilePublisherRule(customRule, siPolicy);
             }
@@ -1396,7 +1398,7 @@ namespace WDAC_Wizard
                 }
             }
 
-            else if(customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
+            else if (customRule.Type == PolicyCustomRules.RuleType.PackagedApp)
             {
                 siPolicy = PolicyHelper.CreatePFNRule(customRule, siPolicy);
             }
@@ -1441,7 +1443,7 @@ namespace WDAC_Wizard
             // If Edit mode is selected, since the 'New Save Location' field is optional, the Policy.SchemaPath can either be set or null.  
             // If the field is null, set the save locaiton to the same location as the EditPolicyPath.
             // Otherwise, keep Policy.SchemaPath as is
-            
+
             Logger.Log.AddInfoMsg("--- Merge Templates Policy ---");
 
             // Check whether the User Mode recommended block list rules are wanted in the output:
@@ -1471,12 +1473,12 @@ namespace WDAC_Wizard
 
             if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
-                if(String.IsNullOrEmpty(this.Policy.SchemaPath))
+                if (String.IsNullOrEmpty(this.Policy.SchemaPath))
                 {
                     // Since we don't have a new save location, copy the TemplatePath
                     // and append '_version' to the file path.
                     // Check if _v10.0.x.y is already in string ie. editing the output of an editing workflow
-                    int versionNumPos = this.Policy.EditPathContainsVersionInfo(); 
+                    int versionNumPos = this.Policy.EditPathContainsVersionInfo();
                     if (versionNumPos > 0)
                     {
                         string filePathWithoutVer = this.Policy.EditPolicyPath.Substring(0, versionNumPos);
@@ -1484,14 +1486,14 @@ namespace WDAC_Wizard
                     }
                     else
                     {
-                        string filePathWithoutExt = Path.Combine(Path.GetDirectoryName(this.Policy.EditPolicyPath), 
+                        string filePathWithoutExt = Path.Combine(Path.GetDirectoryName(this.Policy.EditPolicyPath),
                                                                  Path.GetFileNameWithoutExtension(this.Policy.EditPolicyPath));
                         this.Policy.SchemaPath = String.Format("{0}_v{1}.xml", filePathWithoutExt, this.Policy.UpdateVersion());
                     }
                 }
                 else
                 {
-                    this.Policy.UpdateVersion(); 
+                    this.Policy.UpdateVersion();
                 }
 
                 // If editing policy, ensure that the IDs in the siPolicyCustomRules are not shared by the rules in Policy.siPolicy
@@ -1595,9 +1597,9 @@ namespace WDAC_Wizard
         private bool WantToAbandonWork()
         {
             Logger.Log.AddWarningMsg("Abandon Work Entered.");
-            DialogResult res = MessageBox.Show("Are you sure you want to abandon your progress?", 
-                                                "Confirmation", 
-                                                MessageBoxButtons.OKCancel, 
+            DialogResult res = MessageBox.Show("Are you sure you want to abandon your progress?",
+                                                "Confirmation",
+                                                MessageBoxButtons.OKCancel,
                                                 MessageBoxIcon.Information);
 
             if (res == DialogResult.OK)
@@ -1614,7 +1616,7 @@ namespace WDAC_Wizard
             {
                 Logger.Log.AddWarningMsg("Abandon Work returned Other.");
                 return false;
-            }       
+            }
         }
 
         /// <summary>
@@ -1628,28 +1630,28 @@ namespace WDAC_Wizard
 
             this.Controls.Add(button_Next);
             button_Next.BringToFront();
-            button_Next.Focus(); 
+            button_Next.Focus();
 
             // Set highlight panel location
             int X_OFFSET = 15;
             int Y_OFFSET = 5;
             try
             {
-                var sideButton = (Button)sender; 
+                var sideButton = (Button)sender;
                 this.controlHighlight_Panel.Location = new System.Drawing.Point(sideButton.Location.X - X_OFFSET, sideButton.Location.Y + Y_OFFSET);
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 this.controlHighlight_Panel.Location = new System.Drawing.Point(this.home_Button.Location.X - X_OFFSET, this.home_Button.Location.Y + Y_OFFSET);
             }
 
             // Enable Settings Button -- if on building page, it will be disabled below
-            this.settings_Button.Enabled = true; 
+            this.settings_Button.Enabled = true;
 
             // Set link text
-            if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New)
+            if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.New)
             {
-                if(this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
+                if (this.Policy._PolicyType == WDAC_Policy.PolicyType.BasePolicy)
                 {
                     this.workflow_Label.Visible = true;
                     this.page1_Button.Visible = true;
@@ -1685,7 +1687,7 @@ namespace WDAC_Wizard
             else if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Edit)
             {
                 // Editing a policy but not creating one from event logs
-                if(this.EditWorkflow == EditWorkflowType.Edit)
+                if (this.EditWorkflow == EditWorkflowType.Edit)
                 {
                     this.workflow_Label.Visible = true;
                     this.page1_Button.Visible = true;
@@ -1702,7 +1704,7 @@ namespace WDAC_Wizard
                     this.page4_Button.Text = "Creating Policy";
                 }
                 // Creating a policy from event log or advanced hunting
-                else if(this.EditWorkflow == EditWorkflowType.EventLog)
+                else if (this.EditWorkflow == EditWorkflowType.EventLog)
                 {
                     this.workflow_Label.Visible = true;
                     this.page1_Button.Visible = true;
@@ -1717,9 +1719,9 @@ namespace WDAC_Wizard
                     this.page3_Button.Text = "Creating Policy";
                 }
             }
-            
+
             // Policy Merger
-            else if(this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Merge)
+            else if (this.Policy.PolicyWorkflow == WDAC_Policy.Workflow.Merge)
             {
                 this.workflow_Label.Visible = true;
                 this.page1_Button.Visible = true;
@@ -1743,77 +1745,43 @@ namespace WDAC_Wizard
             }
 
             // Lazy implementation of highlighting current page in workflow
-            switch(this.CurrentPage){
-            case 1:
-                this.page1_Button.Enabled = true;
-                this.page2_Button.Enabled = false;
-                this.page3_Button.Enabled = false;
-                this.page4_Button.Enabled = false;
-                this.page5_Button.Enabled = false;
-                controlHighlight_Panel.Location = new System.Drawing.Point(this.page1_Button.Location.X - X_OFFSET, this.page1_Button.Location.Y + Y_OFFSET);
-                break;
-
-            case 2:
-                if(this.view == 3) // Merge
-                {
-                    // Building page
-                    this.page1_Button.Enabled = false;
+            switch (this.CurrentPage)
+            {
+                case 1:
+                    this.page1_Button.Enabled = true;
                     this.page2_Button.Enabled = false;
                     this.page3_Button.Enabled = false;
                     this.page4_Button.Enabled = false;
                     this.page5_Button.Enabled = false;
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page1_Button.Location.X - X_OFFSET, this.page1_Button.Location.Y + Y_OFFSET);
+                    break;
 
-                    this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
+                case 2:
+                    if (this.view == 3) // Merge
+                    {
+                        // Building page
+                        this.page1_Button.Enabled = false;
+                        this.page2_Button.Enabled = false;
+                        this.page3_Button.Enabled = false;
+                        this.page4_Button.Enabled = false;
+                        this.page5_Button.Enabled = false;
+
+                        this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
                     }
-                else
-                {
-                    this.page1_Button.Enabled = true;
-                    this.page2_Button.Enabled = true;
-                    this.page3_Button.Enabled = false;
-                    this.page4_Button.Enabled = false;
-                    this.page5_Button.Enabled = false;
-                }
-                controlHighlight_Panel.Location = new System.Drawing.Point(this.page2_Button.Location.X - X_OFFSET, this.page2_Button.Location.Y + Y_OFFSET);
-                break;
+                    else
+                    {
+                        this.page1_Button.Enabled = true;
+                        this.page2_Button.Enabled = true;
+                        this.page3_Button.Enabled = false;
+                        this.page4_Button.Enabled = false;
+                        this.page5_Button.Enabled = false;
+                    }
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page2_Button.Location.X - X_OFFSET, this.page2_Button.Location.Y + Y_OFFSET);
+                    break;
 
-            case 3:
+                case 3:
 
-                if(this.view ==2 && this.EditWorkflow == EditWorkflowType.EventLog) // event log or AH building page
-                {
-                    this.page1_Button.Enabled = false;
-                    this.page2_Button.Enabled = false;
-                    this.page3_Button.Enabled = false;
-                    this.page4_Button.Enabled = false;
-                    this.page5_Button.Enabled = false;
-
-                    this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
-                }
-                else
-                {
-                    this.page1_Button.Enabled = true;
-                    this.page2_Button.Enabled = true;
-                    this.page3_Button.Enabled = true;
-                    this.page4_Button.Enabled = false;
-                    this.page5_Button.Enabled = false;
-                }
-                controlHighlight_Panel.Location = new System.Drawing.Point(this.page3_Button.Location.X - X_OFFSET, this.page3_Button.Location.Y + Y_OFFSET);
-                break;
-
-            case 4:
-                if(this.view == 2) // Edit
-                {
-                    // Building page
-                    this.page1_Button.Enabled = false;
-                    this.page2_Button.Enabled = false;
-                    this.page3_Button.Enabled = false;
-                    this.page4_Button.Enabled = false;
-                    this.page5_Button.Enabled = false;
-
-                    this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
-                }
-                else
-                {
-                    if(this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy) // build page for supplemental policies
+                    if (this.view == 2 && this.EditWorkflow == EditWorkflowType.EventLog) // event log or AH building page
                     {
                         this.page1_Button.Enabled = false;
                         this.page2_Button.Enabled = false;
@@ -1823,33 +1791,68 @@ namespace WDAC_Wizard
 
                         this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
                     }
-
                     else
                     {
                         this.page1_Button.Enabled = true;
                         this.page2_Button.Enabled = true;
                         this.page3_Button.Enabled = true;
-                        this.page4_Button.Enabled = true;
+                        this.page4_Button.Enabled = false;
                         this.page5_Button.Enabled = false;
                     }
-                }
-                    
-                controlHighlight_Panel.Location = new System.Drawing.Point(this.page4_Button.Location.X - X_OFFSET, this.page4_Button.Location.Y + Y_OFFSET);
-                break;
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page3_Button.Location.X - X_OFFSET, this.page3_Button.Location.Y + Y_OFFSET);
+                    break;
 
-            case 5:
-                // Building page
+                case 4:
+                    if (this.view == 2) // Edit
+                    {
+                        // Building page
+                        this.page1_Button.Enabled = false;
+                        this.page2_Button.Enabled = false;
+                        this.page3_Button.Enabled = false;
+                        this.page4_Button.Enabled = false;
+                        this.page5_Button.Enabled = false;
 
-                this.page1_Button.Enabled = false;
-                this.page2_Button.Enabled = false;
-                this.page3_Button.Enabled = false;
-                this.page4_Button.Enabled = false;
-                this.page5_Button.Enabled = false;
+                        this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
+                    }
+                    else
+                    {
+                        if (this.Policy._PolicyType == WDAC_Policy.PolicyType.SupplementalPolicy) // build page for supplemental policies
+                        {
+                            this.page1_Button.Enabled = false;
+                            this.page2_Button.Enabled = false;
+                            this.page3_Button.Enabled = false;
+                            this.page4_Button.Enabled = false;
+                            this.page5_Button.Enabled = false;
 
-                this.settings_Button.Enabled = false;
+                            this.settings_Button.Enabled = false; // disable settings button to prevent writing to flushed/closed logger
+                        }
 
-                controlHighlight_Panel.Location = new System.Drawing.Point(this.page5_Button.Location.X - X_OFFSET, this.page5_Button.Location.Y + Y_OFFSET);
-                break;
+                        else
+                        {
+                            this.page1_Button.Enabled = true;
+                            this.page2_Button.Enabled = true;
+                            this.page3_Button.Enabled = true;
+                            this.page4_Button.Enabled = true;
+                            this.page5_Button.Enabled = false;
+                        }
+                    }
+
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page4_Button.Location.X - X_OFFSET, this.page4_Button.Location.Y + Y_OFFSET);
+                    break;
+
+                case 5:
+                    // Building page
+
+                    this.page1_Button.Enabled = false;
+                    this.page2_Button.Enabled = false;
+                    this.page3_Button.Enabled = false;
+                    this.page4_Button.Enabled = false;
+                    this.page5_Button.Enabled = false;
+
+                    this.settings_Button.Enabled = false;
+
+                    controlHighlight_Panel.Location = new System.Drawing.Point(this.page5_Button.Location.X - X_OFFSET, this.page5_Button.Location.Y + Y_OFFSET);
+                    break;
             }
         }
 
@@ -1863,7 +1866,7 @@ namespace WDAC_Wizard
             {
                 this.Controls.RemoveByKey(page);
             }
-            this.PageList.Clear(); 
+            this.PageList.Clear();
         }
 
         /// <summary>
@@ -1874,47 +1877,48 @@ namespace WDAC_Wizard
             label_Info.Visible = true;
             label_Info.ForeColor = Color.DeepSkyBlue;
 
-            switch (infoN){
-            case 0:
-                // Reset label
-                label_Info.Text = " ";
-                HideInfoLabel();
-                break;
-
-            case 1:
-                label_Info.Text = "Windows S Mode Mode does the following";
-                break;
-
-            case 2:
-                label_Info.Text = "Signed and Reputable Mode does the following";
-                break;
-
-            case 3:
-                label_Info.Text = "Audit Only Mode does the following";
-                break;
-                
-            case 97:
-                label_Info.Text = "Please select an exisiting policy .xml file before continuing.";
-                label_Info.ForeColor = Color.Red;
-                Logger.Log.AddWarningMsg("Page controller triggered without selecting existing policy .xml file"); 
-                break;
-
-            case 98:
-                label_Info.Text = "Please select one of the options before continuing.";
-                label_Info.ForeColor = Color.Red;
-                Logger.Log.AddWarningMsg("Page controller triggered without selecting a policy template");
-                break;
-
-            case 99:
-
-                label_Info.Text = this.ErrorMsg;
-                label_Info.ForeColor = Color.Red;
-                Logger.Log.AddErrorMsg(this.ErrorMsg);
+            switch (infoN)
+            {
+                case 0:
+                    // Reset label
+                    label_Info.Text = " ";
+                    HideInfoLabel();
                     break;
 
-            default:
-                label_Info.Text = " ";
-                break;
+                case 1:
+                    label_Info.Text = "Windows S Mode Mode does the following";
+                    break;
+
+                case 2:
+                    label_Info.Text = "Signed and Reputable Mode does the following";
+                    break;
+
+                case 3:
+                    label_Info.Text = "Audit Only Mode does the following";
+                    break;
+
+                case 97:
+                    label_Info.Text = "Please select an exisiting policy .xml file before continuing.";
+                    label_Info.ForeColor = Color.Red;
+                    Logger.Log.AddWarningMsg("Page controller triggered without selecting existing policy .xml file");
+                    break;
+
+                case 98:
+                    label_Info.Text = "Please select one of the options before continuing.";
+                    label_Info.ForeColor = Color.Red;
+                    Logger.Log.AddWarningMsg("Page controller triggered without selecting a policy template");
+                    break;
+
+                case 99:
+
+                    label_Info.Text = this.ErrorMsg;
+                    label_Info.ForeColor = Color.Red;
+                    Logger.Log.AddErrorMsg(this.ErrorMsg);
+                    break;
+
+                default:
+                    label_Info.Text = " ";
+                    break;
             }
 
             label_Info.Focus();
@@ -1928,10 +1932,10 @@ namespace WDAC_Wizard
         public void SetControlPanelUI()
         {
             // Dark Mode
-            if(Properties.Settings.Default.useDarkMode)
+            if (Properties.Settings.Default.useDarkMode)
             {
                 // Control panel color
-                this.control_Panel.BackColor = Color.Black; 
+                this.control_Panel.BackColor = Color.Black;
 
                 // Subcontrol elements like buttons and text
                 foreach (Control control in this.control_Panel.Controls)
@@ -1945,22 +1949,22 @@ namespace WDAC_Wizard
 
                 // Home and Settings images
                 settings_Button.Image = Properties.Resources.white_gear;
-                home_Button.Image = Properties.Resources.white_house; 
+                home_Button.Image = Properties.Resources.white_house;
             }
 
             // Light Mode
             else
             {
                 // Control Panel color
-                this.control_Panel.BackColor = Color.FromArgb(230, 230, 230); 
+                this.control_Panel.BackColor = Color.FromArgb(230, 230, 230);
 
                 // Subcontrol elements like buttons and text
-                foreach(Control control in this.control_Panel.Controls)
+                foreach (Control control in this.control_Panel.Controls)
                 {
-                    if(control.Tag == null 
+                    if (control.Tag == null
                         || control.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
-                        control.ForeColor = Color.Black; 
+                        control.ForeColor = Color.Black;
                     }
                 }
 
@@ -1980,8 +1984,8 @@ namespace WDAC_Wizard
             if (Properties.Settings.Default.useDarkMode)
             {
                 button_Next.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
                 button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                 button_Next.ForeColor = System.Drawing.Color.DodgerBlue;
                 button_Next.BackColor = System.Drawing.Color.Transparent;
@@ -1991,8 +1995,8 @@ namespace WDAC_Wizard
             else
             {
                 button_Next.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
-                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50,30,144,255);
+                button_Next.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
+                button_Next.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
                 button_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                 button_Next.ForeColor = System.Drawing.Color.Black;
                 button_Next.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -2008,7 +2012,7 @@ namespace WDAC_Wizard
             // Break early if setting is disabled. The user has already seen this message and elected not to show this
             if (!Properties.Settings.Default.showIntegrityIssue)
             {
-                return; 
+                return;
             }
 
             DialogResult res = MessageBox.Show("The Wizard was unable to add trust for required PowerShell scripts. This may lead to policy build hanging during Folder Scanning. " +
@@ -2020,7 +2024,7 @@ namespace WDAC_Wizard
 
             if (res == DialogResult.No)
             {
-                Properties.Settings.Default.showIntegrityIssue = false; 
+                Properties.Settings.Default.showIntegrityIssue = false;
                 Properties.Settings.Default.Save();
             }
         }
@@ -2032,23 +2036,23 @@ namespace WDAC_Wizard
         /// <param name="e"></param>
         public void ResetWorkflow(object sender, EventArgs e)
         {
-            this.Home_Button_Click(sender, e); 
+            this.Home_Button_Click(sender, e);
         }
-    
+
         /// <summary>
         /// Creates the session folder. Contents such as the log, intermediate policies are stored here.
         /// </summary>
         private string CreateTempFolder()
         {
             //AppData + WDAC Temp folder
-            string tempFolderPath = Helper.GetTempFolderPath(); 
+            string tempFolderPath = Helper.GetTempFolderPath();
 
             if (!Directory.Exists(tempFolderPath))
             {
                 Directory.CreateDirectory(tempFolderPath);
             }
 
-            return tempFolderPath; 
+            return tempFolderPath;
         }
 
         /// <summary>
@@ -2076,13 +2080,13 @@ namespace WDAC_Wizard
         private void MainWindow_Load(object sender, EventArgs e)
         {
             // Set background color
-            SetMainWindowColors(); 
+            SetMainWindowColors();
 
             // Set UI for the Control Panel
             SetControlPanelUI();
 
             // Set UI for the 'Next' Button
-            SetNextButtonUI(); 
+            SetNextButtonUI();
         }
 
         /// <summary>
@@ -2092,14 +2096,14 @@ namespace WDAC_Wizard
         public void SetMainWindowColors()
         {
             // Iterate over all the controls and set the forecolor
-            foreach(Control control in this.Controls)
+            foreach (Control control in this.Controls)
             {
-                if(control.GetType() != typeof(Panel)) // exclude the control panel
+                if (control.GetType() != typeof(Panel)) // exclude the control panel
                 {
-                    if(control.Tag == null 
+                    if (control.Tag == null
                         || control.Tag.ToString() != Properties.Resources.IgnoreDarkModeTag)
                     {
-                        if(Properties.Settings.Default.useDarkMode)
+                        if (Properties.Settings.Default.useDarkMode)
                         {
                             // Dark Mode
                             control.ForeColor = Color.White;
@@ -2107,7 +2111,7 @@ namespace WDAC_Wizard
                         else
                         {
                             // Light Mode
-                            control.ForeColor = Color.Black; 
+                            control.ForeColor = Color.Black;
                         }
                     }
                 }
@@ -2117,7 +2121,7 @@ namespace WDAC_Wizard
             if (Properties.Settings.Default.useDarkMode)
             {
                 // Dark Mode
-                BackColor = Color.FromArgb(15, 15, 15); 
+                BackColor = Color.FromArgb(15, 15, 15);
             }
             else
             {
@@ -2132,12 +2136,16 @@ namespace WDAC_Wizard
         /// </summary>
         public void ReloadPreviousPages()
         {
-            foreach(var pageKey in this.PageList)
+            foreach (var pageKey in this.PageList)
             {
                 Control[] _Pages = this.Controls.Find(pageKey, true);
-                _Pages[0].Refresh(); 
+                _Pages[0].Refresh();
             }
         }
 
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     } // End of MainForm class
 }

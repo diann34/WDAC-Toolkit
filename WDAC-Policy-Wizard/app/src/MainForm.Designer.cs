@@ -35,7 +35,6 @@ namespace WDAC_Wizard
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             label_Welcome = new System.Windows.Forms.Label();
             button_New = new System.Windows.Forms.Button();
-            label_Info = new System.Windows.Forms.Label();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             button_Edit = new System.Windows.Forms.Button();
             button_Merge = new System.Windows.Forms.Button();
@@ -49,12 +48,21 @@ namespace WDAC_Wizard
             controlHighlight_Panel = new System.Windows.Forms.Panel();
             home_Button = new System.Windows.Forms.Button();
             settings_Button = new System.Windows.Forms.Button();
-            button_Next = new System.Windows.Forms.Button();
-            label1 = new System.Windows.Forms.Label();
+            label4 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
-            label4 = new System.Windows.Forms.Label();
+            label1 = new System.Windows.Forms.Label();
+            tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            tableLayoutControl = new System.Windows.Forms.TableLayoutPanel();
+            tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            button_Next = new System.Windows.Forms.Button();
+            label_Info = new System.Windows.Forms.Label();
+            tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             control_Panel.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            tableLayoutControl.SuspendLayout();
+            tableLayoutPanel2.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
             // 
             // label_Welcome
@@ -63,7 +71,7 @@ namespace WDAC_Wizard
             label_Welcome.BackColor = System.Drawing.Color.Transparent;
             label_Welcome.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label_Welcome.ForeColor = System.Drawing.Color.Black;
-            label_Welcome.Location = new System.Drawing.Point(185, 42);
+            label_Welcome.Location = new System.Drawing.Point(3, 17);
             label_Welcome.Name = "label_Welcome";
             label_Welcome.Size = new System.Drawing.Size(115, 30);
             label_Welcome.TabIndex = 3;
@@ -72,35 +80,22 @@ namespace WDAC_Wizard
             // button_New
             // 
             button_New.BackColor = System.Drawing.Color.Transparent;
+            button_New.Dock = System.Windows.Forms.DockStyle.Fill;
             button_New.FlatAppearance.BorderSize = 0;
             button_New.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
             button_New.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
             button_New.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button_New.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             button_New.Image = Properties.Resources.newPolicy;
-            button_New.Location = new System.Drawing.Point(328, 225);
+            button_New.Location = new System.Drawing.Point(136, 76);
             button_New.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             button_New.Name = "button_New";
-            button_New.Size = new System.Drawing.Size(195, 217);
+            button_New.Size = new System.Drawing.Size(260, 245);
             button_New.TabIndex = 10;
             button_New.Text = "Policy Creator";
             button_New.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             button_New.UseVisualStyleBackColor = false;
             button_New.Click += Button_New_Click;
-            // 
-            // label_Info
-            // 
-            label_Info.AutoSize = true;
-            label_Info.BackColor = System.Drawing.Color.Transparent;
-            label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-            label_Info.ForeColor = System.Drawing.Color.DodgerBlue;
-            label_Info.Location = new System.Drawing.Point(168, 674);
-            label_Info.Name = "label_Info";
-            label_Info.Size = new System.Drawing.Size(71, 18);
-            label_Info.TabIndex = 9;
-            label_Info.Tag = "IgnoreDarkMode";
-            label_Info.Text = "Info Text";
-            label_Info.Visible = false;
             // 
             // backgroundWorker1
             // 
@@ -112,16 +107,17 @@ namespace WDAC_Wizard
             // button_Edit
             // 
             button_Edit.BackColor = System.Drawing.Color.Transparent;
+            button_Edit.Dock = System.Windows.Forms.DockStyle.Fill;
             button_Edit.FlatAppearance.BorderSize = 0;
             button_Edit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
             button_Edit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
             button_Edit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button_Edit.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             button_Edit.Image = Properties.Resources.tools;
-            button_Edit.Location = new System.Drawing.Point(567, 225);
+            button_Edit.Location = new System.Drawing.Point(402, 76);
             button_Edit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             button_Edit.Name = "button_Edit";
-            button_Edit.Size = new System.Drawing.Size(195, 217);
+            button_Edit.Size = new System.Drawing.Size(260, 245);
             button_Edit.TabIndex = 25;
             button_Edit.Text = "Policy Editor";
             button_Edit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -131,16 +127,17 @@ namespace WDAC_Wizard
             // button_Merge
             // 
             button_Merge.BackColor = System.Drawing.Color.Transparent;
+            button_Merge.Dock = System.Windows.Forms.DockStyle.Fill;
             button_Merge.FlatAppearance.BorderSize = 0;
             button_Merge.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
             button_Merge.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 30, 144, 255);
             button_Merge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button_Merge.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             button_Merge.Image = Properties.Resources.merge;
-            button_Merge.Location = new System.Drawing.Point(813, 225);
+            button_Merge.Location = new System.Drawing.Point(668, 76);
             button_Merge.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             button_Merge.Name = "button_Merge";
-            button_Merge.Size = new System.Drawing.Size(195, 217);
+            button_Merge.Size = new System.Drawing.Size(260, 245);
             button_Merge.TabIndex = 26;
             button_Merge.Text = "Policy Merger";
             button_Merge.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -159,11 +156,12 @@ namespace WDAC_Wizard
             control_Panel.Controls.Add(controlHighlight_Panel);
             control_Panel.Controls.Add(home_Button);
             control_Panel.Controls.Add(settings_Button);
+            control_Panel.Dock = System.Windows.Forms.DockStyle.Fill;
             control_Panel.ForeColor = System.Drawing.SystemColors.ControlText;
-            control_Panel.Location = new System.Drawing.Point(0, 0);
+            control_Panel.Location = new System.Drawing.Point(3, 2);
             control_Panel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             control_Panel.Name = "control_Panel";
-            control_Panel.Size = new System.Drawing.Size(150, 700);
+            control_Panel.Size = new System.Drawing.Size(148, 699);
             control_Panel.TabIndex = 30;
             // 
             // workflow_Label
@@ -339,17 +337,44 @@ namespace WDAC_Wizard
             settings_Button.UseVisualStyleBackColor = false;
             settings_Button.Click += Settings_Button_Click;
             // 
-            // button_Next
+            // label4
             // 
-            button_Next.Location = new System.Drawing.Point(1134, 663);
-            button_Next.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            button_Next.Name = "button_Next";
-            button_Next.Size = new System.Drawing.Size(93, 33);
-            button_Next.TabIndex = 31;
-            button_Next.Text = "Next";
-            button_Next.UseVisualStyleBackColor = true;
-            button_Next.Visible = false;
-            button_Next.Click += Button_Next_Click;
+            label4.AutoSize = true;
+            label4.BackColor = System.Drawing.Color.Transparent;
+            label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            label4.Font = new System.Drawing.Font("Tahoma", 9F);
+            label4.Location = new System.Drawing.Point(667, 323);
+            label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(262, 99);
+            label4.TabIndex = 35;
+            label4.Text = "Merge two existing policies into one\r\n";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.BackColor = System.Drawing.Color.Transparent;
+            label2.Dock = System.Windows.Forms.DockStyle.Top;
+            label2.Font = new System.Drawing.Font("Tahoma", 9F);
+            label2.Location = new System.Drawing.Point(135, 323);
+            label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(262, 36);
+            label2.TabIndex = 33;
+            label2.Text = "Create a new base or supplemental policy";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.BackColor = System.Drawing.Color.Transparent;
+            label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            label3.Font = new System.Drawing.Font("Tahoma", 9F);
+            label3.Location = new System.Drawing.Point(401, 323);
+            label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(262, 99);
+            label3.TabIndex = 34;
+            label3.Text = "Edit an existing policy on disk or convert event logs to a policy";
             // 
             // label1
             // 
@@ -357,65 +382,125 @@ namespace WDAC_Wizard
             label1.BackColor = System.Drawing.Color.Transparent;
             label1.Font = new System.Drawing.Font("Tahoma", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
             label1.ForeColor = System.Drawing.Color.Black;
-            label1.Location = new System.Drawing.Point(185, 82);
+            label1.Location = new System.Drawing.Point(3, 69);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(311, 24);
             label1.TabIndex = 32;
             label1.Text = "Select a task below to get started";
             // 
-            // label2
+            // tableLayoutPanel1
             // 
-            label2.AutoSize = true;
-            label2.BackColor = System.Drawing.Color.Transparent;
-            label2.Font = new System.Drawing.Font("Tahoma", 9F);
-            label2.Location = new System.Drawing.Point(296, 453);
-            label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(244, 36);
-            label2.TabIndex = 33;
-            label2.Text = "Create a new base or supplemental \r\npolicy";
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 87.5F));
+            tableLayoutPanel1.Controls.Add(control_Panel, 0, 0);
+            tableLayoutPanel1.Controls.Add(tableLayoutControl, 1, 0);
+            tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(1232, 703);
+            tableLayoutPanel1.TabIndex = 36;
             // 
-            // label3
+            // tableLayoutControl
             // 
-            label3.AutoSize = true;
-            label3.BackColor = System.Drawing.Color.Transparent;
-            label3.Font = new System.Drawing.Font("Tahoma", 9F);
-            label3.Location = new System.Drawing.Point(563, 453);
-            label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(218, 36);
-            label3.TabIndex = 34;
-            label3.Text = "Edit an existing policy on disk or \r\nconvert event logs to a policy";
+            tableLayoutControl.ColumnCount = 1;
+            tableLayoutControl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutControl.Controls.Add(label1, 0, 2);
+            tableLayoutControl.Controls.Add(label_Welcome, 0, 1);
+            tableLayoutControl.Controls.Add(tableLayoutPanel2, 0, 4);
+            tableLayoutControl.Controls.Add(tableLayoutPanel3, 0, 3);
+            tableLayoutControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutControl.Location = new System.Drawing.Point(157, 3);
+            tableLayoutControl.Name = "tableLayoutControl";
+            tableLayoutControl.RowCount = 6;
+            tableLayoutControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 2.5F));
+            tableLayoutControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.5F));
+            tableLayoutControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.5F));
+            tableLayoutControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72.5F));
+            tableLayoutControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.5F));
+            tableLayoutControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 2.5F));
+            tableLayoutControl.Size = new System.Drawing.Size(1072, 697);
+            tableLayoutControl.TabIndex = 31;
+            tableLayoutControl.Paint += tableLayoutPanel2_Paint;
             // 
-            // label4
+            // tableLayoutPanel2
             // 
-            label4.AutoSize = true;
-            label4.BackColor = System.Drawing.Color.Transparent;
-            label4.Font = new System.Drawing.Font("Tahoma", 9F);
-            label4.Location = new System.Drawing.Point(802, 453);
-            label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(236, 18);
-            label4.TabIndex = 35;
-            label4.Text = "Merge two existing policies into one\r\n";
+            tableLayoutPanel2.ColumnCount = 2;
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel2.Controls.Add(button_Next, 1, 0);
+            tableLayoutPanel2.Controls.Add(label_Info, 0, 0);
+            tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel2.Location = new System.Drawing.Point(3, 629);
+            tableLayoutPanel2.Name = "tableLayoutPanel2";
+            tableLayoutPanel2.RowCount = 1;
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel2.Size = new System.Drawing.Size(1066, 46);
+            tableLayoutPanel2.TabIndex = 36;
+            // 
+            // button_Next
+            // 
+            button_Next.Dock = System.Windows.Forms.DockStyle.Right;
+            button_Next.Location = new System.Drawing.Point(951, 2);
+            button_Next.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            button_Next.Name = "button_Next";
+            button_Next.Size = new System.Drawing.Size(112, 42);
+            button_Next.TabIndex = 37;
+            button_Next.Text = "Next";
+            button_Next.UseVisualStyleBackColor = true;
+            button_Next.Visible = false;
+            button_Next.Click += Button_Next_Click;
+            // 
+            // label_Info
+            // 
+            label_Info.AutoSize = true;
+            label_Info.BackColor = System.Drawing.Color.Transparent;
+            label_Info.Dock = System.Windows.Forms.DockStyle.Fill;
+            label_Info.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+            label_Info.ForeColor = System.Drawing.Color.DodgerBlue;
+            label_Info.Location = new System.Drawing.Point(3, 0);
+            label_Info.Name = "label_Info";
+            label_Info.Size = new System.Drawing.Size(527, 46);
+            label_Info.TabIndex = 36;
+            label_Info.Tag = "IgnoreDarkMode";
+            label_Info.Text = "Info Text";
+            label_Info.Visible = false;
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 5;
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            tableLayoutPanel3.Controls.Add(button_Merge, 3, 1);
+            tableLayoutPanel3.Controls.Add(label4, 3, 2);
+            tableLayoutPanel3.Controls.Add(button_Edit, 2, 1);
+            tableLayoutPanel3.Controls.Add(label3, 2, 2);
+            tableLayoutPanel3.Controls.Add(button_New, 1, 1);
+            tableLayoutPanel3.Controls.Add(label2, 1, 2);
+            tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel3.Location = new System.Drawing.Point(3, 124);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 4;
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            tableLayoutPanel3.Size = new System.Drawing.Size(1066, 499);
+            tableLayoutPanel3.TabIndex = 37;
             // 
             // MainWindow
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            AutoSize = true;
             BackColor = System.Drawing.Color.White;
             ClientSize = new System.Drawing.Size(1232, 703);
-            Controls.Add(label4);
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Controls.Add(button_Next);
-            Controls.Add(control_Panel);
-            Controls.Add(label_Welcome);
-            Controls.Add(button_Merge);
-            Controls.Add(button_Edit);
-            Controls.Add(label_Info);
-            Controls.Add(button_New);
+            Controls.Add(tableLayoutPanel1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             HelpButton = true;
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
@@ -427,13 +512,18 @@ namespace WDAC_Wizard
             Load += MainWindow_Load;
             control_Panel.ResumeLayout(false);
             control_Panel.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutControl.ResumeLayout(false);
+            tableLayoutControl.PerformLayout();
+            tableLayoutPanel2.ResumeLayout(false);
+            tableLayoutPanel2.PerformLayout();
+            tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel3.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
         private System.Windows.Forms.Label label_Welcome;
-        private System.Windows.Forms.Label label_Info;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private EditWorkflow editWorkflow1;
         private System.Windows.Forms.Button button_New;
@@ -442,7 +532,6 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Panel control_Panel;
         private System.Windows.Forms.Button settings_Button;
         private System.Windows.Forms.Button home_Button;
-        private System.Windows.Forms.Button button_Next;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel controlHighlight_Panel;
         private System.Windows.Forms.Button page3_Button;
@@ -454,6 +543,12 @@ namespace WDAC_Wizard
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label workflow_Label;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutControl;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Button button_Next;
+        private System.Windows.Forms.Label label_Info;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
     }
 }
 
