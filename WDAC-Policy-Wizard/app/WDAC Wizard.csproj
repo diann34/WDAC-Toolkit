@@ -229,5 +229,8 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>  
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="echo Copying neccessary files...&#xD;&#xA;copy &quot;$(ProjectDir)\Resources\RulesDict.xml&quot; &quot;$(ProjectDir)$(OutDir)\&quot; /Y&#xD;&#xA;xcopy &quot;$(ProjectDir)\Resources\policyTemplates&quot; &quot;$(ProjectDir)$(OutDir)\Templates&quot; /Y /S /I /C&#xD;&#xA;echo Done!" />
+  </Target>  
 </Project>
